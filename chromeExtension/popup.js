@@ -11,11 +11,18 @@ document.getElementById('generate').addEventListener('click', async () => {
 });
 
 async function callLLMApi(prompt) {
-  // Replace this function with the actual implementation for calling the LLM API
-  // For now, it simply returns the prompt as the generated text
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(prompt);
-    }, 500);
+  const response = await fetch("http://localhost:3000/generate", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ prompt }),
   });
+
+  if (response.ok) {
+    const data = await response.json();
+    return data.generatedText;
+  } else {
+    throw new Error("An error occurred while generating text.");
+  }
 }
